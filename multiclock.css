@@ -1,1 +1,24 @@
 
+@font-face {
+  font-family: "D14MI";
+  src: url("DSEG14Modern-Italic.woff") format('woff');
+}
+
+.time, .date {
+font-family: "D14MI";
+font-size: 36pt;
+color: maroon;
+}
+
+body {
+  background-color: black;
+}
+.intro {
+    background-color: yellow;
+}
+
+.region {
+  font-family: "Helvetica";
+  font-size: 18pt;
+  color: grey;
+}
