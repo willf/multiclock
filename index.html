@@ -10,7 +10,8 @@
 
     <!-- Bootstrap -->
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="multiclock.css" />
 
 </head>
@@ -18,39 +19,51 @@
 <body>
     <div class="container">
 
-
         <div class="row">
             <div class="col-md-4 date">
-                <div class="region">Local Date</div><span id=local_date>****** *, ****</span></div>
-                <div class="col-md-4 date">
-                    <div class="region">UTC</div><span id=utc_time>**:**:**</span></div>
+                <div class="region">Local Date</div><span id=local_date>**-**-**</span>
+            </div>
+            <div class="col-md-4 date">
+                <div class="region">UTC</div><span id=utc_time>**:**:**</span>
+            </div>
             <div class="col-md-4 time">
-                <div class="region">Local Time</div><span id=local_time>**:**:**</span></div>
+                <div class="region">Local Time</div><span id=local_time>**:**:**</span>
+            </div>
         </div>
         <div class="row">
             <div class="col-md-4 time">
-                <div class="region">Columbus</div><span id=columbus_time>**:**:**</span></div>
+                <div class="region">New York, Michigan</div><span id=eastern_time>**:**:**</span>
+            </div>
             <div class="col-md-4 time">
-                <div class="region">Huntsville</div><span id=huntsville_time>**:**:**</span></div>
+                <div class="region">Huntsville, Iowa, Texas</div><span id=central_time>**:**:**</span>
+            </div>
             <div class="col-md-4 time">
-                <div class="region">West Coast</div><span id=sf_time>**:**:**</span></div>
+                <div class="region">West Coast</div><span id=pacific_time>**:**:**</span>
+            </div>
         </div>
         <div class="row">
             <div class="col-md-4 time">
-                <div class="region">Kalamazoo</div><span id=azo_time>**:**:**</span></div>
+                <div class="region">China</div><span id=china_time>**:**:**</span>
+            </div>
             <div class="col-md-4 time">
-                <div class="region">Japan</div><span id=japan_time>**:**:**</span></div>
+                <div class="region">Japan</div><span id=japan_time>**:**:**</span>
+            </div>
             <div class="col-md-4 time">
-                <div class="region">Epoch</div><span id=epoch_time>**********</span></div>
+                <div class="region">Epoch</div><span id=epoch_time>**********</span>
+            </div>
         </div>
 
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <!-- Latest compiled and minified JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous">
+        </script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.5/moment-timezone-with-data.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.5/moment-timezone-with-data.min.js">
+        </script>
         <script src="multiclock.js"></script>
     </div>
 </body>
+
 </html>
