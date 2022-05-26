@@ -7,7 +7,7 @@ setInterval(function() {
     $("#central_time").text(local.clone().tz("America/Chicago").format("HH:mm"));
     $("#mountain_time").text(local.clone().tz("America/Denver").format("HH:mm"));
     $("#pacific_time").text(local.clone().tz("America/Los_Angeles").format("HH:mm"));
-    $("#china_time").text(local.clone().tz("Asia/Shanghai").format("HH:mm"));
+    $("#acwst_time").text(local.clone().tz("Australia/Eucla").format("HH:mm"));
     $("#utc_time").text(local.clone().utc().format("HH:mm"));
     $("#central_europe_time").text(local.clone().tz("Europe/Madrid").format("HH:mm"));
     $("#epoch_time").text(local.unix());
