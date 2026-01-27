@@ -42,39 +42,239 @@
         box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
       }
 
-        <div class="row">
-            <div class="col-md-4 date">
-                <div class="region">Local Date</div><span id=local_date>**-**-**</span>
+      /* Drag and Drop Styles */
+      .glass-card.dragging {
+        opacity: 0.4;
+        transform: scale(0.95);
+        border: 1px dashed #3b82f6;
+      }
+
+      .drag-handle {
+        cursor: grab;
+      }
+      .drag-handle:active {
+        cursor: grabbing;
+      }
+
+      .time-display {
+        font-variant-numeric: tabular-nums;
+      }
+
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: #1e293b;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #475569;
+        border-radius: 10px;
+      }
+
+      .epoch-highlight {
+        background: linear-gradient(90deg, #38bdf8, #818cf8);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .status-badge {
+        font-size: 0.65rem;
+        padding: 2px 6px;
+        border-radius: 4px;
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+      }
+
+      /* Toggle Switch Styles */
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 22px;
+      }
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #334155;
+        transition: 0.4s;
+        border-radius: 34px;
+      }
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+      input:checked + .slider {
+        background-color: #3b82f6;
+      }
+      input:checked + .slider:before {
+        transform: translateX(22px);
+      }
+    </style>
+  </head>
+  <body class="min-h-screen p-4 md:p-8">
+    <div class="max-w-6xl mx-auto">
+      <!-- Header -->
+      <header
+        class="mb-10 text-center md:text-left flex flex-col md:flex-row md:items-end justify-between gap-4"
+      >
+        <div>
+          <h1 class="text-4xl font-bold tracking-tight mb-2">
+            Multi<span class="text-blue-500">clock</span>
+          </h1>
+          <div
+            class="flex flex-col md:flex-row items-center gap-4 text-slate-400"
+          >
+            <p>High-precision global time synchronization</p>
+            <div class="hidden md:block h-4 w-px bg-slate-700"></div>
+            <div
+              class="flex items-center gap-3 bg-slate-800/50 px-3 py-1.5 rounded-full border border-slate-700"
+            >
+              <span
+                class="text-xs font-semibold uppercase tracking-wider text-slate-500"
+                >Seconds</span
+              >
+              <label class="switch">
+                <input type="checkbox" id="seconds-toggle" checked />
+                <span class="slider"></span>
+              </label>
             </div>
-            <div class="col-md-4 time">
-                <div class="region">UTC</div><span id=utc_time>**:**:**</span>
+          </div>
+        </div>
+        <div class="glass-card px-6 py-3 rounded-2xl flex items-center gap-6">
+          <div class="text-right">
+            <div
+              class="text-xs text-slate-500 font-bold uppercase tracking-widest"
+            >
+              Unix Epoch
             </div>
-            <div class="col-md-4 time">
-                <div class="region">Epoch</div><span id=epoch_time>**:**:**</span>
+            <div
+              id="epoch-timer"
+              class="mono text-xl font-bold epoch-highlight tracking-tighter"
+            >
+              0000000000
             </div>
-            <div class="col-md-4 time">
-                <div class="region">Japan</div><span id=japan_time>**:**:**</span>
+          </div>
+          <div class="h-10 w-px bg-slate-700"></div>
+          <div class="text-left">
+            <div id="current-date" class="text-sm font-semibold text-slate-300">
+              Loading date...
             </div>
-            <div class="col-md-4 time">
-                <div class="region">UK</div><span id=uk_time>**:**:**</span>
+            <div class="text-xs text-slate-500 uppercase">
+              Universal Standard
             </div>
-            <div class="col-md-4 time">
-                <div class="region">Central Europe</div><span id=central_europe_time>**:**:**</span>
-            </div>
-            <div class="col-md-4 time">
-                <div class="region">East Coast</div><span id=eastern_time>**:**:**</span>
-            </div>
-            <div class="col-md-4 time">
-                <div class="region">Central</div><span id=central_time>**:**:**</span>
-            </div>
-            <div class="col-md-4 time">
-                <div class="region">Mountain</div><span id=mountain_time>**:**:**</span>
-            </div>
-            <div class="col-md-4 time">
-                <div class="region">West Coast</div><span id=pacific_time>**:**:**</span>
-            </div>
-            <div class="col-md-4 time">
-                <div class="region">ACWST</div><span id=acwst_time>**:**:**</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Primary Monitors -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+        <!-- Local Time -->
+        <div class="glass-card p-8 rounded-3xl relative overflow-hidden group">
+          <div
+            class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"
+          >
+            <i class="fas fa-map-marker-alt text-6xl"></i>
+          </div>
+          <div class="flex items-center gap-2 mb-4">
+            <span class="status-badge bg-blue-500/20 text-blue-400"
+              >Primary</span
+            >
+            <h2
+              class="text-slate-400 font-semibold uppercase text-sm tracking-widest"
+            >
+              Local System Time
+            </h2>
+          </div>
+          <div
+            id="local-time"
+            class="time-display text-5xl md:text-7xl font-light mono mb-2 tracking-tighter text-white"
+          >
+            00:00:00
+          </div>
+          <div id="local-zone" class="text-blue-400 font-medium text-lg">
+            Detecting...
+          </div>
+        </div>
+
+        <!-- UTC Time -->
+        <div
+          class="glass-card p-8 rounded-3xl relative overflow-hidden group border-blue-500/30"
+        >
+          <div
+            class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"
+          >
+            <i class="fas fa-globe text-6xl"></i>
+          </div>
+          <div class="flex items-center gap-2 mb-4">
+            <span class="status-badge bg-emerald-500/20 text-emerald-400"
+              >Reference</span
+            >
+            <h2
+              class="text-slate-400 font-semibold uppercase text-sm tracking-widest"
+            >
+              UTC / GMT
+            </h2>
+          </div>
+          <div
+            id="utc-time"
+            class="time-display text-5xl md:text-7xl font-light mono mb-2 tracking-tighter text-white"
+          >
+            00:00:00
+          </div>
+          <div class="text-emerald-400 font-medium text-lg">
+            UTC • Coordinated Universal Time
+          </div>
+        </div>
+      </div>
+
+      <!-- Dynamic Zones Section -->
+      <div class="space-y-6">
+        <div
+          class="flex flex-col md:flex-row md:items-center justify-between gap-4"
+        >
+          <div class="flex items-center gap-4">
+            <h3 class="text-2xl font-semibold flex items-center gap-3">
+              <i class="fas fa-clock text-blue-500"></i>
+              Tracked Timezones
+            </h3>
+            <span class="text-xs text-slate-500 bg-slate-800 px-2 py-1 rounded"
+              >Drag to reorder</span
+            >
+          </div>
+
+          <div class="relative w-full md:w-96">
+            <i
+              class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"
+            ></i>
+            <input
+              type="text"
+              id="zone-search"
+              placeholder="Search by city, name, or code (e.g. EST, Tokyo...)"
+              class="w-full bg-slate-800 border border-slate-700 rounded-xl py-3 pl-12 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-slate-200"
+            />
+            <!-- Search Results Dropdown -->
+            <div
+              id="search-results"
+              class="hidden absolute z-50 w-full mt-2 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl max-h-60 overflow-y-auto custom-scrollbar"
+            >
+              <!-- Results injected here -->
             </div>
           </div>
         </div>
@@ -97,4 +297,322 @@
       </div>
     </div>
 
+    <script>
+      const allTimezones = Intl.supportedValuesOf("timeZone");
+      let trackedZones = JSON.parse(localStorage.getItem("trackedZones")) || [
+        "America/New_York",
+        "Europe/London",
+        "Asia/Tokyo",
+      ];
+      let showSeconds =
+        JSON.parse(localStorage.getItem("showSeconds")) !== false;
+      let dragSrcIndex = null;
+      let searchableIndex = [];
+
+      const elements = {
+        epoch: document.getElementById("epoch-timer"),
+        date: document.getElementById("current-date"),
+        localTime: document.getElementById("local-time"),
+        localZone: document.getElementById("local-zone"),
+        utcTime: document.getElementById("utc-time"),
+        search: document.getElementById("zone-search"),
+        results: document.getElementById("search-results"),
+        clockContainer: document.getElementById("custom-clocks"),
+        msg: document.getElementById("message-box"),
+        secondsToggle: document.getElementById("seconds-toggle"),
+      };
+
+      // Set initial toggle state
+      elements.secondsToggle.checked = showSeconds;
+
+      // Helper to get Timezone names (Long and Short)
+      function getTzNames(date, timeZone) {
+        try {
+          const partsLong = new Intl.DateTimeFormat("en-US", {
+            timeZone,
+            timeZoneName: "long",
+          }).formatToParts(date);
+          const partsShort = new Intl.DateTimeFormat("en-US", {
+            timeZone,
+            timeZoneName: "short",
+          }).formatToParts(date);
+          return {
+            long: partsLong.find((p) => p.type === "timeZoneName")?.value || "",
+            short:
+              partsShort.find((p) => p.type === "timeZoneName")?.value || "",
+          };
+        } catch (e) {
+          return { long: "", short: "" };
+        }
+      }
+
+      // Initialize a searchable index for better lookup
+      function initSearchIndex() {
+        const now = new Date();
+        searchableIndex = allTimezones.map((tz) => {
+          const names = getTzNames(now, tz);
+          const city = tz.split("/").pop().replace(/_/g, " ");
+          const region = tz.split("/")[0];
+          return {
+            id: tz,
+            city: city,
+            region: region,
+            short: names.short,
+            long: names.long,
+            // String for easy searching
+            searchStr:
+              `${tz} ${city} ${names.short} ${names.long}`.toLowerCase(),
+          };
+        });
+      }
+
+      // --- Core Time Updates ---
+      function updateMainClocks() {
+        const now = new Date();
+
+        // Epoch
+        elements.epoch.textContent = Math.floor(now.getTime() / 1000);
+
+        // Date
+        elements.date.textContent = now.toLocaleDateString("en-US", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+
+        // Time Format Options
+        const timeOptions = {
+          hour12: false,
+          hour: "2-digit",
+          minute: "2-digit",
+        };
+        if (showSeconds) timeOptions.second = "2-digit";
+
+        // Local
+        const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const localNames = getTzNames(now, localTz);
+        elements.localTime.textContent = now.toLocaleTimeString(
+          "en-US",
+          timeOptions,
+        );
+        elements.localZone.textContent = `${localTz.replace(/_/g, " ")} • ${localNames.long}`;
+
+        // UTC
+        elements.utcTime.textContent = now.toLocaleTimeString("en-US", {
+          ...timeOptions,
+          timeZone: "UTC",
+        });
+
+        // Update Custom Clocks
+        document.querySelectorAll("[data-timezone]").forEach((card) => {
+          const tz = card.getAttribute("data-timezone");
+          try {
+            const timeStr = now.toLocaleTimeString("en-US", {
+              ...timeOptions,
+              timeZone: tz,
+            });
+            const dateStr = now.toLocaleDateString("en-US", {
+              timeZone: tz,
+              month: "short",
+              day: "numeric",
+            });
+            const names = getTzNames(now, tz);
+
+            card.querySelector(".clock-time").textContent = timeStr;
+            card.querySelector(".clock-date").textContent =
+              `${dateStr} • ${names.short}`;
+            card.querySelector(".clock-long-name").textContent = names.long;
+          } catch (e) {
+            card.querySelector(".clock-time").textContent = "--:--";
+          }
+        });
+      }
+
+      // --- Drag & Drop Handlers ---
+      function handleDragStart(e) {
+        dragSrcIndex = parseInt(this.getAttribute("data-index"));
+        this.classList.add("dragging");
+        e.dataTransfer.effectAllowed = "move";
+      }
+
+      function handleDragOver(e) {
+        if (e.preventDefault) e.preventDefault();
+        return false;
+      }
+
+      function handleDragEnter(e) {
+        this.classList.add("border-blue-500");
+      }
+
+      function handleDragLeave(e) {
+        this.classList.remove("border-blue-500");
+      }
+
+      function handleDrop(e) {
+        if (e.stopPropagation) e.stopPropagation();
+
+        const targetIndex = parseInt(this.getAttribute("data-index"));
+
+        if (dragSrcIndex !== targetIndex) {
+          // Reorder the array
+          const movedItem = trackedZones.splice(dragSrcIndex, 1)[0];
+          trackedZones.splice(targetIndex, 0, movedItem);
+
+          // Save and re-render
+          localStorage.setItem("trackedZones", JSON.stringify(trackedZones));
+          renderCustomClocks();
+        }
+        return false;
+      }
+
+      function handleDragEnd(e) {
+        this.classList.remove("dragging");
+        document.querySelectorAll(".glass-card").forEach((card) => {
+          card.classList.remove("border-blue-500");
+        });
+      }
+
+      // --- Timezone Management ---
+      function renderCustomClocks() {
+        elements.clockContainer.innerHTML = "";
+        trackedZones.forEach((tz, index) => {
+          const card = document.createElement("div");
+          card.className = "glass-card p-6 rounded-2xl relative group";
+          card.setAttribute("data-timezone", tz);
+          card.setAttribute("data-index", index);
+          card.setAttribute("draggable", "true");
+
+          const cleanName = tz.split("/").pop().replace(/_/g, " ");
+          const region = tz.split("/")[0];
+
+          card.innerHTML = `
+                    <div class="flex justify-between items-start mb-1">
+                        <div>
+                            <div class="text-xs text-slate-500 font-bold uppercase tracking-widest">${region}</div>
+                            <div class="clock-long-name text-[10px] text-slate-600 font-medium uppercase tracking-tighter">...</div>
+                        </div>
+                        <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div class="drag-handle p-2 text-slate-600 hover:text-blue-400">
+                                <i class="fas fa-grip-vertical"></i>
+                            </div>
+                            <button class="remove-btn p-2 text-slate-600 hover:text-red-400 transition-all">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="text-lg font-bold text-white mb-3 truncate pr-6">${cleanName}</div>
+                    <div class="flex items-end justify-between">
+                        <div class="clock-time text-3xl font-light mono text-blue-400">00:00:00</div>
+                        <div class="clock-date text-sm text-slate-500 mb-1">...</div>
+                    </div>
+                `;
+
+          // Add drag events
+          card.addEventListener("dragstart", handleDragStart);
+          card.addEventListener("dragenter", handleDragEnter);
+          card.addEventListener("dragover", handleDragOver);
+          card.addEventListener("dragleave", handleDragLeave);
+          card.addEventListener("drop", handleDrop);
+          card.addEventListener("dragend", handleDragEnd);
+
+          card
+            .querySelector(".remove-btn")
+            .addEventListener("click", () => removeZone(tz));
+          elements.clockContainer.appendChild(card);
+        });
+        updateMainClocks();
+      }
+
+      function addZone(tz) {
+        if (!trackedZones.includes(tz)) {
+          trackedZones.push(tz);
+          localStorage.setItem("trackedZones", JSON.stringify(trackedZones));
+          renderCustomClocks();
+          showMessage(`Added ${tz}`);
+        }
+        elements.search.value = "";
+        elements.results.classList.add("hidden");
+      }
+
+      function removeZone(tz) {
+        trackedZones = trackedZones.filter((t) => t !== tz);
+        localStorage.setItem("trackedZones", JSON.stringify(trackedZones));
+        renderCustomClocks();
+      }
+
+      function showMessage(text) {
+        elements.msg.textContent = text;
+        elements.msg.classList.remove(
+          "opacity-0",
+          "translate-y-4",
+          "pointer-events-none",
+        );
+        elements.msg.classList.add("opacity-100", "translate-y-0");
+
+        setTimeout(() => {
+          elements.msg.classList.add(
+            "opacity-0",
+            "translate-y-4",
+            "pointer-events-none",
+          );
+          elements.msg.classList.remove("opacity-100", "translate-y-0");
+        }, 3000);
+      }
+
+      // --- Event Listeners ---
+      elements.secondsToggle.addEventListener("change", (e) => {
+        showSeconds = e.target.checked;
+        localStorage.setItem("showSeconds", JSON.stringify(showSeconds));
+        updateMainClocks();
+      });
+
+      elements.search.addEventListener("input", (e) => {
+        const val = e.target.value.toLowerCase().trim();
+        if (val.length < 1) {
+          elements.results.classList.add("hidden");
+          return;
+        }
+
+        // Search through our rich index instead of just the simple ID array
+        const filtered = searchableIndex
+          .filter((item) => item.searchStr.includes(val))
+          .slice(0, 10);
+
+        if (filtered.length > 0) {
+          elements.results.innerHTML = filtered
+            .map(
+              (item) => `
+                    <div class="p-3 hover:bg-slate-700 cursor-pointer border-b border-slate-700 last:border-0 transition-colors" onclick="addZone('${item.id}')">
+                        <div class="flex items-center justify-between">
+                            <div class="text-sm font-medium text-slate-200">${item.city}</div>
+                            <div class="text-[10px] font-bold text-blue-400 bg-blue-400/10 px-1.5 py-0.5 rounded">${item.short}</div>
+                        </div>
+                        <div class="text-[10px] text-slate-500 uppercase tracking-tight mt-0.5">${item.long}</div>
+                    </div>
+                `,
+            )
+            .join("");
+          elements.results.classList.remove("hidden");
+        } else {
+          elements.results.classList.add("hidden");
+        }
+      });
+
+      document.addEventListener("click", (e) => {
+        if (
+          !elements.search.contains(e.target) &&
+          !elements.results.contains(e.target)
+        ) {
+          elements.results.classList.add("hidden");
+        }
+      });
+
+      // Initialize
+      initSearchIndex();
+      renderCustomClocks();
+      setInterval(updateMainClocks, 1000);
+      updateMainClocks();
+    </script>
+  </body>
 </html>
